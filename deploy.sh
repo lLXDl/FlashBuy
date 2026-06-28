@@ -76,7 +76,7 @@ echo -e "${GREEN}✓ 目录创建完成${NC}"
 # ======================================
 echo -e "\n${YELLOW}④ 启动中间件服务（MySQL/Redis/RabbitMQ/Nacos）...${NC}"
 
-docker-compose up -d mysql redis rabbitmq nacos
+docker compose up -d mysql redis rabbitmq nacos
 
 echo "等待中间件启动..."
 sleep 30
@@ -84,7 +84,7 @@ sleep 30
 # 检查 MySQL 状态
 echo "检查 MySQL 状态..."
 for i in {1..10}; do
-    if docker-compose exec -T mysql mysqladmin ping -h localhost --password=flashbuy@123 2>/dev/null; then
+    if docker compose exec -T mysql mysqladmin ping -h localhost --password=flashbuy@123 2>/dev/null; then
         echo "MySQL 就绪"
         break
     fi
@@ -95,7 +95,7 @@ done
 # 检查 Redis 状态
 echo "检查 Redis 状态..."
 for i in {1..10}; do
-    if docker-compose exec -T redis redis-cli -a flashbuy@123 ping 2>/dev/null | grep -q PONG; then
+    if docker compose exec -T redis redis-cli -a flashbuy@123 ping 2>/dev/null | grep -q PONG; then
         echo "Redis 就绪"
         break
     fi
@@ -106,7 +106,7 @@ done
 # 检查 RabbitMQ 状态
 echo "检查 RabbitMQ 状态..."
 for i in {1..10}; do
-    if docker-compose exec -T rabbitmq rabbitmqctl status 2>/dev/null; then
+    if docker compose exec -T rabbitmq rabbitmqctl status 2>/dev/null; then
         echo "RabbitMQ 就绪"
         break
     fi
@@ -129,7 +129,7 @@ done
 
 if [ "$nacos_ready" = false ]; then
     echo -e "${RED}Nacos 启动失败，请查看日志${NC}"
-    docker-compose logs nacos
+    docker compose logs nacos
     exit 1
 fi
 
@@ -143,12 +143,12 @@ echo -e "\n${YELLOW}⑤ 初始化数据库...${NC}"
 if ls ./sql/*.sql 1>/dev/null 2>&1; then
     echo "正在导入 SQL 文件..."
     for sql_file in ./sql/*.sql; do
-        docker-compose exec -T mysql mysql -u root -pflashbuy@123 fastbuy < "$sql_file"
+        docker compose exec -T mysql mysql -u root -pflashbuy@123 fastbuy < "$sql_file"
         echo "导入 $sql_file 完成"
     done
 else
     echo "提示：未找到 SQL 文件，请手动导入数据库表结构"
-    echo "执行方式：docker-compose exec mysql mysql -u root -pflashbuy@123 fastbuy"
+    echo "执行方式：docker compose exec mysql mysql -u root -pflashbuy@123 fastbuy"
 fi
 
 echo -e "${GREEN}✓ 数据库初始化完成${NC}"
@@ -180,7 +180,7 @@ echo -e "${GREEN}✓ Maven 打包完成${NC}"
 # ======================================
 echo -e "\n${YELLOW}⑦ 构建业务服务镜像...${NC}"
 
-docker-compose build gateway auth-service seckill-service frontend
+docker compose build gateway auth-service seckill-service frontend
 
 echo -e "${GREEN}✓ 业务镜像构建完成${NC}"
 
@@ -189,7 +189,7 @@ echo -e "${GREEN}✓ 业务镜像构建完成${NC}"
 # ======================================
 echo -e "\n${YELLOW}⑧ 启动业务服务...${NC}"
 
-docker-compose up -d gateway auth-service seckill-service frontend
+docker compose up -d gateway auth-service seckill-service frontend
 
 echo "等待业务服务启动..."
 sleep 20
@@ -209,7 +209,7 @@ done
 
 if [ "$gateway_ready" = false ]; then
     echo -e "${RED}Gateway 启动失败，请查看日志${NC}"
-    docker-compose logs gateway
+    docker compose logs gateway
     exit 1
 fi
 
@@ -221,7 +221,7 @@ echo -e "${GREEN}✓ 业务服务全部启动成功${NC}"
 echo -e "\n${YELLOW}⑨ 验证部署...${NC}"
 
 echo "--- 容器状态 ---"
-docker-compose ps
+docker compose ps
 
 echo -e "\n${GREEN}======================================"
 echo -e "    ✅ FlashBuy 部署完成！"
