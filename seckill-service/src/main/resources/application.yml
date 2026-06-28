@@ -1,0 +1,50 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: seckill-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fastbuy?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: l19981231
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: localhost  # Redis 服务器地址
+      port: 6379       # Redis 端口
+      database: 0      # Redis 数据库索引
+      password: 123456        # Redis 密码（如果没有密码就留空）
+      timeout: 3000ms  # 连接超时时间
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual   # 手动确认，保证消息不丢失
+        prefetch: 1               # 一次只取一条，避免消费不均
+  amqp:
+    deserialization:
+      trust:
+        all: true # Spring AMQP 默认只允许反序列化受信任的类
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html

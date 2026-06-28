@@ -1,0 +1,49 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: auth-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fastbuy?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: l19981231
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+
+# JWT 配置（务必和 common-security 里保持一致）
+jwt:
+  secret: your-very-secure-secret-key-at-least-32-characters-long
+  expiration: 3600   # 秒
+
+# 白名单（登录注册必须放行）
+security:
+  ignore-urls:
+    - /auth/login
+    - /auth/register
+    - /doc.html
+    - /swagger-resources/**
+    - /v3/api-docs/**
+# application.yml
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /doc.html
+    tags-sorter: alpha
+    operations-sorter: method
+  show-actuator: false
+  packages-to-scan: com.lxd.controller
+  paths-to-match: /auth/**, /seckill/**, /like/**

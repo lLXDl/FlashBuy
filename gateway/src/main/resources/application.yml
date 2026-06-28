@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: seckill-service
+          uri: lb://seckill-service
+          predicates:
+            - Path=/seckill/**
+        - id: like-service
+          uri: lb://seckill-service
+          predicates:
+            - Path=/like/**
+        - id: order-service
+          uri: lb://seckill-service
+          predicates:
+            - Path=/order/**
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**

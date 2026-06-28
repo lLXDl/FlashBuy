@@ -1,0 +1,12 @@
+jwt:
+  secret: your-very-secure-secret-key-at-least-32-characters-long  # 至少32位
+  expiration: 3600   # 单位：秒，例如1小时
+security:
+  ignore-urls:
+    - /auth/login
+    - /auth/register
+    - /captcha/**
+    - /doc.html
+    - /swagger-resources/**
+    - /v3/api-docs/**
+    - /actuator/health

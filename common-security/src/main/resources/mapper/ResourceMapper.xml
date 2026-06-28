@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxd.mapper.ResourceMapper">
+
+    <resultMap id="ResourceWithRolesMap" type="com.lxd.entity.Resource">
+        <id property="id" column="id"/>
+        <result property="url" column="url"/>
+        <result property="method" column="method"/>
+
+        <!-- 2. collection 内部强烈建议加上角色的主键 id 映射 -->
+        <collection property="roles" ofType="com.lxd.entity.Role">
+            <id property="id" column="role_id"/>
+            <result property="roleCode" column="role_code"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAllWithRoles" resultMap="ResourceWithRolesMap">
+        SELECT r.id, r.url, r.method, ro.id AS role_id, ro.role_code
+        FROM sys_resource r
+                 LEFT JOIN sys_resource_role rr ON r.id = rr.resource_id
+                 LEFT JOIN sys_role ro ON rr.role_id = ro.id
+    </select>
+
+
+</mapper>
