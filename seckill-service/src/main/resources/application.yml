@@ -41,7 +41,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+#        server-addr: localhost:8848
+        server-addr: nacos:8848
 
 springdoc:
   api-docs:

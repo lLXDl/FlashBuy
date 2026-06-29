@@ -18,7 +18,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+#        server-addr: localhost:8848
+        server-addr: nacos:8848
 
 
 # JWT 配置（务必和 common-security 里保持一致）
